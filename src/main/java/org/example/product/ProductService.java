@@ -1,5 +1,6 @@
 package org.example.product;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
 public class ProductService {
@@ -28,5 +29,9 @@ public class ProductService {
     public Product getProductById(long id) {
         return productRepository.findById(id)
                 .orElseThrow();
+    }
+
+    public void removeProduct(long id) {
+        productRepository.deleteProductById(id);
     }
 }

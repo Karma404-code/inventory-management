@@ -80,4 +80,14 @@ public class ProductRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteProductById(long id) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM product WHERE id = ?");
+            ps.setLong(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
