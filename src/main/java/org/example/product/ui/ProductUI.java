@@ -3,6 +3,7 @@ package org.example.product.ui;
 import org.example.product.ProductService;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -15,6 +16,8 @@ public class ProductUI extends JPanel {
     DefaultTableModel productModel;
     JTable productTable;
     JScrollPane productScroll;
+    JButton logout, add;
+    JPanel buttonPanel;
 
     ProductService productService;
 
@@ -30,18 +33,32 @@ public class ProductUI extends JPanel {
     private void init() {
         setLayout(new BorderLayout());
 
-        Object[] cols = {"Product", "Price", "Quantity", "isEdited"};
+        Object[] cols = {"id", "Product", "Price", "Quantity", "isEdited"};
         productModel = new DefaultTableModel(cols, 0);
 
         productTable = new JTable(productModel);
         setupTable();
+        productTable.removeColumn(productTable.getColumnModel().getColumn(0));
 
         productScroll = new JScrollPane(productTable);
-
+        productScroll.setBorder(new EmptyBorder(10, 25, 25, 25));
         centerRowValue();
         refreshTable();
 
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BorderLayout());
+        buttonPanel.setPreferredSize(new Dimension(500, 80));
+        buttonPanel.setBorder(new EmptyBorder(10, 35, 15, 25));
+
+        logout = new JButton("Logout");
+        add = new JButton("Add");
+
+        buttonPanel.add(add, BorderLayout.WEST);
+        buttonPanel.add(logout, BorderLayout.EAST);
+
+        add(buttonPanel, BorderLayout.NORTH);
         add(productScroll,  BorderLayout.CENTER);
+
     }
 
     private void setupTable() {
@@ -81,18 +98,19 @@ public class ProductUI extends JPanel {
     }
 
     private void deleteProduct(int row) {
-        String productName = (String) productModel.getValueAt(row, 0);
+        String productName = (String) productModel.getValueAt(row, 1);
         int confirm = JOptionPane.showConfirmDialog(productTable,
                 "Are you sure you want to delete '" + productName + "'?",
                 "Confirm Delete",
                 JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
-           //  productService.deleteProduct(row);
+            long id = (long) productModel.getValueAt(row, 0);
+            productService.removeProduct(row);
+            // System.out.println(productModel.getValueAt(row, 0));
             refreshTable();
             JOptionPane.showMessageDialog(productTable, "Product deleted successfully!");
         }
-        System.out.println("deleting: " + row);
     }
 
     private void editProduct(int row) {
@@ -186,6 +204,7 @@ public class ProductUI extends JPanel {
         productModel.setRowCount(0);
         productService.getAllProducts().forEach(product ->
                 productModel.addRow( new Object[]{
+                        product.id(),
                         product.name(),
                         product.price(),
                         product.quantity(),
