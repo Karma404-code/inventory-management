@@ -32,7 +32,9 @@ public class ProductRepository {
             ps = conn.prepareStatement("select * from product");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Product p = new Product(rs.getString("name"),
+                Product p = new Product(
+                        rs.getLong("id"),
+                        rs.getString("name"),
                         rs.getDouble("price"),
                         rs.getInt("quantity"),
                         false);
@@ -52,7 +54,9 @@ public class ProductRepository {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                product = Optional.of(new Product(rs.getString("name"),
+                product = Optional.of(new Product(
+                        rs.getLong("id"),
+                        rs.getString("name"),
                         rs.getDouble("price"),
                         rs.getInt("quantity"),
                         false));
