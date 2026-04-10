@@ -36,8 +36,7 @@ public class ProductRepository {
                         rs.getLong("id"),
                         rs.getString("name"),
                         rs.getDouble("price"),
-                        rs.getInt("quantity"),
-                        false);
+                        rs.getInt("quantity"));
                 products.add(p);
             }
         } catch (SQLException e) {
@@ -58,8 +57,7 @@ public class ProductRepository {
                         rs.getLong("id"),
                         rs.getString("name"),
                         rs.getDouble("price"),
-                        rs.getInt("quantity"),
-                        false));
+                        rs.getInt("quantity")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -85,6 +83,20 @@ public class ProductRepository {
         try {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM product WHERE id = ?");
             ps.setLong(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateProductById(Product product) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE product SET name = ?, price = ?, quantity = ? WHERE id = ?");
+            ps.setString(1, product.name());
+            ps.setDouble(2, product.price());
+            ps.setInt(3, product.quantity());
+            ps.setLong(4, product.id());
+
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

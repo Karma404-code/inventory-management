@@ -1,5 +1,6 @@
 package org.example.product.ui;
 
+import org.example.product.Product;
 import org.example.product.ProductService;
 
 import javax.swing.*;
@@ -33,7 +34,7 @@ public class ProductUI extends JPanel {
     private void init() {
         setLayout(new BorderLayout());
 
-        Object[] cols = {"id", "Product", "Price", "Quantity", "isEdited"};
+        Object[] cols = {"id", "Product", "Price", "Quantity"};
         productModel = new DefaultTableModel(cols, 0);
 
         productTable = new JTable(productModel);
@@ -106,7 +107,7 @@ public class ProductUI extends JPanel {
 
         if (confirm == JOptionPane.YES_OPTION) {
             long id = (long) productModel.getValueAt(row, 0);
-            productService.removeProduct(row);
+            productService.removeProduct(id);
             // System.out.println(productModel.getValueAt(row, 0));
             refreshTable();
             JOptionPane.showMessageDialog(productTable, "Product deleted successfully!");
@@ -114,11 +115,9 @@ public class ProductUI extends JPanel {
     }
 
     private void editProduct(int row) {
-        productTable.setValueAt(true, row, 3);
-
-        String productName = (String) productModel.getValueAt(row, 0);
-        double price = (double) productModel.getValueAt(row, 1);
-        int quantity = (int) productModel.getValueAt(row, 2);
+        String productName = (String) productModel.getValueAt(row, 1);
+        double price = (double) productModel.getValueAt(row, 2);
+        int quantity = (int) productModel.getValueAt(row, 3);
 
         // Create edit dialog
         JDialog editDialog = new JDialog(parentFrame, "Edit Product", true);
@@ -151,17 +150,13 @@ public class ProductUI extends JPanel {
 
         saveButton.addActionListener(ev -> {
             try {
+                long id = (long) productModel.getValueAt(row, 0);
                 String newName = nameField.getText();
                 double newPrice = Double.parseDouble(priceField.getText());
                 int newQuantity = Integer.parseInt(quantityField.getText());
-
+                 System.out.println("editing: " + id);
                 // Update the product
-                // productService.updateProduct(row, newName, newPrice, newQuantity);
-
-                // Reset isEdited to false after saving
-                productModel.setValueAt(false, row, 3);
-                // productService.setProductEdited(row, false);
-
+                productService.updateProduct(new Product(id, newName, newPrice, newQuantity));
                 refreshTable();
                 editDialog.dispose();
 
@@ -172,16 +167,12 @@ public class ProductUI extends JPanel {
         });
 
         cancelButton.addActionListener(ev -> {
-            // Reset isEdited to false if user cancels
-            productModel.setValueAt(false, row, 3);
-            // productService.setProductEdited(row, false);
             editDialog.dispose();
         });
 
         editDialog.pack();
         editDialog.setLocationRelativeTo(productTable);
         editDialog.setVisible(true);
-        System.out.println("editing: " + row);
     }
 
     private void addProduct() {
@@ -192,11 +183,10 @@ public class ProductUI extends JPanel {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-        IntStream.range(0, productModel.getRowCount()).forEach(i -> {
-           productTable.getColumnModel()
-                   .getColumn(i)
-                   .setCellRenderer(centerRenderer);
-        });
+        IntStream.range(0, productModel.getRowCount()).forEach(i ->
+                productTable.getColumnModel()
+                .getColumn(i)
+                .setCellRenderer(centerRenderer));
 
     }
 
@@ -208,7 +198,6 @@ public class ProductUI extends JPanel {
                         product.name(),
                         product.price(),
                         product.quantity(),
-                        product.isEdited()
                 }
         ));
     }

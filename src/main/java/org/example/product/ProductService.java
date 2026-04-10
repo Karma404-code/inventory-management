@@ -1,6 +1,5 @@
 package org.example.product;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 
 public class ProductService {
@@ -33,5 +32,9 @@ public class ProductService {
 
     public void removeProduct(long id) {
         productRepository.deleteProductById(id);
+    }
+
+    public void updateProduct(Product product) {
+        productRepository.updateProductById(product);
     }
 }
