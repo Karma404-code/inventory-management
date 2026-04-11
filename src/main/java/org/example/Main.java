@@ -1,5 +1,6 @@
 package org.example;
 
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import org.example.authenticate.ui.Login;
 import org.example.product.ui.ProductUI;
@@ -12,7 +13,7 @@ import java.awt.*;
 public class Main {
     static void main() {
         try {
-            UIManager.setLookAndFeel(new FlatMacDarkLaf());
+            UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (UnsupportedLookAndFeelException e) {
             throw new RuntimeException(e);
         }
@@ -22,7 +23,7 @@ public class Main {
         frame.setLocation(500, 500);
         frame.setSize(1600, 1400);
 
-        frame.add(new ProductUI(frame),  BorderLayout.CENTER);
+        frame.add(new Login(frame),  BorderLayout.CENTER);
         frame.setVisible(true);
 
     }
