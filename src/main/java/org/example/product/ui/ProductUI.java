@@ -1,5 +1,6 @@
 package org.example.product.ui;
 
+import org.example.authenticate.ui.Login;
 import org.example.product.Product;
 import org.example.product.ProductService;
 
@@ -52,7 +53,17 @@ public class ProductUI extends JPanel {
         buttonPanel.setBorder(new EmptyBorder(10, 35, 15, 25));
 
         logout = new JButton("Logout");
+        logout.addActionListener(e -> {
+            parentFrame.remove(this);
+            parentFrame.add(new Login(parentFrame));
+            parentFrame.revalidate();
+            parentFrame.repaint();
+        });
+
         add = new JButton("Add");
+        add.addActionListener(e -> {
+            addProduct();
+        });
 
         buttonPanel.add(add, BorderLayout.WEST);
         buttonPanel.add(logout, BorderLayout.EAST);
@@ -176,7 +187,63 @@ public class ProductUI extends JPanel {
     }
 
     private void addProduct() {
-        // todo
+
+        // Create edit dialog
+        JDialog addDialog = new JDialog(parentFrame, "Add Product", true);
+        addDialog.setLayout(new FlowLayout());
+
+        addDialog.add(new JLabel("Name:"));
+
+        JTextField nameField = new JTextField();
+        addDialog.add(nameField);
+
+        // Price field
+
+        addDialog.add(new JLabel("Price:"));
+
+        JTextField priceField = new JTextField();
+        addDialog.add(priceField);
+
+        // Quantity field
+
+        addDialog.add(new JLabel("Quantity:"));
+
+        JTextField quantityField = new JTextField();
+        addDialog.add(quantityField);
+
+        // Button.gridx = 0.gridy = 3;
+        JButton saveButton = new JButton("Save");
+        addDialog.add(saveButton);
+        JButton cancelButton = new JButton("Cancel");
+        addDialog.add(cancelButton);
+
+        saveButton.addActionListener(ev -> {
+            try {
+                 try {
+                String newName = nameField.getText();
+                double newPrice = Double.parseDouble(priceField.getText());
+                int newQuantity = Integer.parseInt(quantityField.getText());
+                // add the product
+                productService.addProduct(new Product(0, newName, newPrice, newQuantity));
+                refreshTable();
+                addDialog.dispose();
+
+                JOptionPane.showMessageDialog(parentFrame, "Product added successfully!");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(parentFrame, "Invalid number format!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(productTable, "Invalid number format!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cancelButton.addActionListener(ev -> {
+            addDialog.dispose();
+        });
+
+        addDialog.pack();
+        addDialog.setLocationRelativeTo(productTable);
+        addDialog.setVisible(true);
     }
 
     private void centerRowValue() {
@@ -190,7 +257,7 @@ public class ProductUI extends JPanel {
 
     }
 
-    private void refreshTable() {
+    public void refreshTable() {
         productModel.setRowCount(0);
         productService.getAllProducts().forEach(product ->
                 productModel.addRow( new Object[]{

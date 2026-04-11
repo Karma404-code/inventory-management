@@ -8,12 +8,6 @@ import java.util.Optional;
 public class ProductRepository {
     Connection conn;
 
-    static void main() {
-        ProductRepository pr = new  ProductRepository();
-        List<Product> products = pr.findAll();
-        System.out.println(products);
-    }
-
     ProductRepository() {
         String url = "jdbc:h2:mem:inventory;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:h2init.sql';USER=admin;PASSWORD=admin";
         String user = "admin";
@@ -69,7 +63,7 @@ public class ProductRepository {
         PreparedStatement ps;
         try {
             ps = conn.prepareStatement("INSERT INTO product (name, price, quantity) " +
-                    "VALUES (?, ?, ?, ?)");
+                    "VALUES (?, ?, ?)");
             ps.setString(1, product.name());
             ps.setDouble(2, product.price());
             ps.setInt(3, product.quantity());
