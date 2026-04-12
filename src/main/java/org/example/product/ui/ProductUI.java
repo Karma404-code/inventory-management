@@ -20,6 +20,9 @@ public class ProductUI extends JPanel {
     JScrollPane productScroll;
     JButton logout, add;
     JPanel buttonPanel;
+    JLabel sortLabel;
+    DefaultComboBoxModel<String> sortModel;
+    JComboBox<String> sort;
 
     ProductService productService;
 
@@ -35,7 +38,7 @@ public class ProductUI extends JPanel {
     private void init() {
         setLayout(new BorderLayout());
 
-        Object[] cols = {"id", "Product", "Price", "Quantity"};
+        Object[] cols = {"id", "Name", "Price", "Quantity"};
         productModel = new DefaultTableModel(cols, 0);
 
         productTable = new JTable(productModel);
@@ -48,9 +51,27 @@ public class ProductUI extends JPanel {
         refreshTable();
 
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BorderLayout());
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setPreferredSize(new Dimension(500, 80));
         buttonPanel.setBorder(new EmptyBorder(10, 35, 15, 25));
+
+        add = new JButton("Add");
+        add.addActionListener(e -> {
+            addProduct();
+        });
+
+        sortLabel = new JLabel("Sort:");
+        sortModel = new DefaultComboBoxModel<String>();
+        IntStream.range(0, productModel.getColumnCount()).forEach(i -> {
+           sortModel.addElement((String) productModel.getColumnName(i));
+        });
+        sort = new JComboBox<>(sortModel);
+
+        sort.addActionListener(e -> {
+            String selected = (String) sortModel.getSelectedItem();
+            System.out.println(selected);
+            sortTable(selected);
+        });
 
         logout = new JButton("Logout");
         logout.addActionListener(e -> {
@@ -60,17 +81,28 @@ public class ProductUI extends JPanel {
             parentFrame.repaint();
         });
 
-        add = new JButton("Add");
-        add.addActionListener(e -> {
-            addProduct();
-        });
 
-        buttonPanel.add(add, BorderLayout.WEST);
-        buttonPanel.add(logout, BorderLayout.EAST);
+        buttonPanel.add(add);
+        buttonPanel.add(sortLabel);
+        buttonPanel.add(sort);
+        buttonPanel.add(logout);
+
 
         add(buttonPanel, BorderLayout.NORTH);
         add(productScroll,  BorderLayout.CENTER);
 
+    }
+
+    private void sortTable(String option) {
+           productModel.setRowCount(0);
+           productService.sortProduct(option.toLowerCase()).forEach(product ->
+                productModel.addRow( new Object[]{
+                        product.id(),
+                        product.name(),
+                        product.price(),
+                        product.quantity()
+                }
+        ));
     }
 
     private void setupTable() {

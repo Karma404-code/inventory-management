@@ -37,4 +37,8 @@ public class ProductService {
     public void updateProduct(Product product) {
         productRepository.updateProductById(product);
     }
+
+    public List<Product> sortProduct(String option) {
+        return productRepository.sortProductByColumn(option);
+    }
 }

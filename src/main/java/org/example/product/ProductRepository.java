@@ -96,4 +96,24 @@ public class ProductRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public List<Product> sortProductByColumn(String column) {
+        List<Product> products = new ArrayList<>();
+        PreparedStatement ps;
+        try {
+            ps = conn.prepareStatement("select * from product order by %s asc ".formatted(column));
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                products.add(new Product(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return products;
+    }
 }
