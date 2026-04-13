@@ -52,7 +52,7 @@ public class ProductUI extends JPanel {
         refreshTable();
 
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new MigLayout());
+        buttonPanel.setLayout(new BorderLayout(3, 5));
         buttonPanel.setPreferredSize(new Dimension(500, 80));
         buttonPanel.setBorder(new EmptyBorder(10, 35, 15, 25));
 
@@ -83,10 +83,13 @@ public class ProductUI extends JPanel {
         });
 
 
-        buttonPanel.add(add);
-        buttonPanel.add(sortLabel);
-        buttonPanel.add(sort);
-        buttonPanel.add(logout, "cell 80 0");
+        JPanel leftSide = new JPanel();
+        leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
+        leftSide.add(add);
+        leftSide.add(sortLabel);
+        leftSide.add(sort);
+        buttonPanel.add(leftSide, BorderLayout.WEST);
+        buttonPanel.add(logout,  BorderLayout.EAST);
 
 
         add(buttonPanel, BorderLayout.NORTH);
