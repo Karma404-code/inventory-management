@@ -33,7 +33,7 @@ public class Login extends JPanel {
         pwd = new JPasswordField(15);
 
         loginBtn = new JButton("login");
-        loginBtn.setBackground(Color.BLUE);
+        loginBtn.setBackground(new  Color(25, 25, 180));
         loginBtn.setForeground(Color.WHITE);
         loginBtn.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 26));
 
