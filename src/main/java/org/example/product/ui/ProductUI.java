@@ -1,5 +1,6 @@
 package org.example.product.ui;
 
+import net.miginfocom.swing.MigLayout;
 import org.example.authenticate.ui.Login;
 import org.example.product.Product;
 import org.example.product.ProductService;
@@ -51,7 +52,7 @@ public class ProductUI extends JPanel {
         refreshTable();
 
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setLayout(new MigLayout());
         buttonPanel.setPreferredSize(new Dimension(500, 80));
         buttonPanel.setBorder(new EmptyBorder(10, 35, 15, 25));
 
@@ -85,7 +86,7 @@ public class ProductUI extends JPanel {
         buttonPanel.add(add);
         buttonPanel.add(sortLabel);
         buttonPanel.add(sort);
-        buttonPanel.add(logout);
+        buttonPanel.add(logout, "cell 80 0");
 
 
         add(buttonPanel, BorderLayout.NORTH);
