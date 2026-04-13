@@ -165,32 +165,32 @@ public class ProductUI extends JPanel {
 
         // Create edit dialog
         JDialog editDialog = new JDialog(parentFrame, "Edit Product", true);
-        editDialog.setLayout(new FlowLayout());
+        editDialog.setLayout(new MigLayout());
 
         editDialog.add(new JLabel("Name:"));
 
         JTextField nameField = new JTextField(productName, 15);
-        editDialog.add(nameField);
+        editDialog.add(nameField, "wrap");
 
         // Price field
 
         editDialog.add(new JLabel("Price:"));
 
         JTextField priceField = new JTextField(String.valueOf(price), 15);
-        editDialog.add(priceField);
+        editDialog.add(priceField, "wrap");
 
         // Quantity field
 
         editDialog.add(new JLabel("Quantity:"));
 
         JTextField quantityField = new JTextField(String.valueOf(quantity), 15);
-        editDialog.add(quantityField);
+        editDialog.add(quantityField, "wrap");
 
         // Button.gridx = 0.gridy = 3;
         JButton saveButton = new JButton("Save");
-        editDialog.add(saveButton);
+        editDialog.add(saveButton, "wrap, cell 1 4, growx");
         JButton cancelButton = new JButton("Cancel");
-        editDialog.add(cancelButton);
+        editDialog.add(cancelButton, "wrap, cell 1 4, growx");
 
         saveButton.addActionListener(ev -> {
             try {
@@ -223,32 +223,33 @@ public class ProductUI extends JPanel {
 
         // Create edit dialog
         JDialog addDialog = new JDialog(parentFrame, "Add Product", true);
-        addDialog.setLayout(new FlowLayout());
+        addDialog.setSize(600, 1200);
+        addDialog.setLayout(new MigLayout());
 
         addDialog.add(new JLabel("Name:"));
 
-        JTextField nameField = new JTextField();
-        addDialog.add(nameField);
+        JTextField nameField = new JTextField(15);
+        addDialog.add(nameField, "wrap");
 
         // Price field
 
         addDialog.add(new JLabel("Price:"));
 
-        JTextField priceField = new JTextField();
-        addDialog.add(priceField);
+        JTextField priceField = new JTextField(15);
+        addDialog.add(priceField, "wrap");
 
         // Quantity field
 
         addDialog.add(new JLabel("Quantity:"));
 
-        JTextField quantityField = new JTextField();
-        addDialog.add(quantityField);
+        JTextField quantityField = new JTextField(15);
+        addDialog.add(quantityField, "wrap");
 
         // Button.gridx = 0.gridy = 3;
         JButton saveButton = new JButton("Save");
-        addDialog.add(saveButton);
+        addDialog.add(saveButton, "wrap, cell 1 4, growx");
         JButton cancelButton = new JButton("Cancel");
-        addDialog.add(cancelButton);
+        addDialog.add(cancelButton, "wrap, cell 1 4, growx");
 
         saveButton.addActionListener(ev -> {
             try {
